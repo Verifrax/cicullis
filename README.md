@@ -176,6 +176,8 @@ No overrides.
 
 ## Versioning
 
+See [CHANGELOG.md](CHANGELOG.md) for a complete, immutable history of behavior.
+
 CICULLIS follows semantic versioning.
 
 * Behavior is stable within a major version
