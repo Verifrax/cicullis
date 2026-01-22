@@ -1,9 +1,8 @@
 name: cicullis
 description: >
-  A GitHub Action that enforces irreversible contracts at CI time.
-  Binary gate. Deterministic rules. Fails builds on boundary violations.
+  Deterministic CI gate enforcing irreversible decisions.
 
-author: midiakiasat
+author: Midia Kiasat
 
 runs:
   using: composite
