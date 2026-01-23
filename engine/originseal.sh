@@ -51,7 +51,7 @@ TIMESTAMP="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf 'BIRTH_COMMIT: %s\n' "$BIRTH_COMMIT"
   printf 'BIRTH_TREE: %s\n' "$BIRTH_TREE"
   printf 'ORIGIN_CONTEXT:\n%s\n' "$TEXT"
-  printf '---\n'
+  printf '%s\n' '---'
 } >> "$LOG"
 
 # --- Verdict ---------------------------------------------------------------

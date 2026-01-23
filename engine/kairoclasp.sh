@@ -75,7 +75,7 @@ REPO="$(git rev-parse --show-toplevel)"
   printf 'COMMIT: %s\n' "$COMMIT"
   printf 'LOCK_AT: %s\n' "$LOCK_TIME"
   printf 'NOW: %s\n' "$NOW"
-  printf '---\n'
+  printf '%s\n' '---'
 } >> "$LOG"
 
 # --- Verdict --------------------------------------------------------------

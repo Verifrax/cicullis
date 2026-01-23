@@ -61,7 +61,7 @@ DIGEST="$(printf '%s' "$PAYLOAD" | sha256sum | awk '{print $1}')"
   printf 'TREE: %s\n' "$HEAD_TREE"
   printf 'DIGEST: %s\n' "$DIGEST"
   printf 'INPUT:\n%s\n' "$INPUT"
-  printf '---\n'
+  printf '%s\n' '---'
 } >> "$LOG"
 
 # --- Verdict --------------------------------------------------------------
