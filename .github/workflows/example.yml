@@ -2,9 +2,6 @@ name: CICULLIS
 
 on:
   pull_request:
-    paths:
-      - 'src/**'
-      - 'lib/**'
 
 permissions:
   contents: read
@@ -14,8 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run CICULLIS with explicit profile
-        uses: midiakiasat/cicullis@v1
-        with:
-          profile: profiles/default.profile
+      - uses: midiakiasat/cicullis@v1

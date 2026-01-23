@@ -1,14 +1,14 @@
 # CICULLIS DEFAULT PROFILE
-# Forward-only. Irreversible. Non-negotiable.
+# CI-SAFE BASELINE
 
 PROFILE_VERSION = 1
 PROFILE_MODE    = STRICT
 PROFILE_LOCK    = FINAL
 
 # --- TIME -------------------------------------------------
-# CI MUST NOT BLOCK ITSELF
+# TIME GATE DISABLED IN CI
 
-LOCK_AT                    = 2000-01-01T00:00:00Z
+LOCK_AT                    = 1970-01-01T00:00:00Z
 TIME_BOUNDARY.ENFORCE      = NO
 TIME_BOUNDARY.MUTABLE      = NO
 
@@ -17,7 +17,7 @@ TIME_BOUNDARY.MUTABLE      = NO
 CUSTODY.REQUIRED           = YES
 CUSTODY.MULTIPLE_ALLOWED   = NO
 CUSTODY.ANONYMOUS          = FORBIDDEN
-custodian: @midiakiasat
+custodian: midiakiasat
 
 # --- PROVENANCE -------------------------------------------
 
