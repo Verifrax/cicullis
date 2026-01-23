@@ -2,19 +2,16 @@ name: CICULLIS (example)
 
 on:
   pull_request:
+    paths-ignore:
+      - ".github/workflows/scorecard.yml"
 
 permissions:
   contents: read
 
 jobs:
   cicullis:
-    # Do NOT run CICULLIS on the OpenSSF Scorecard workflow
-    if: github.workflow != 'OpenSSF Scorecard'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Run CICULLIS
-        uses: midiakiasat/cicullis@v1
+      - uses: midiakiasat/cicullis@v1
