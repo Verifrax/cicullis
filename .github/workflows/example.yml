@@ -3,7 +3,11 @@ name: CICULLIS (example)
 on:
   pull_request:
     paths-ignore:
-      - ".github/workflows/scorecard.yml"
+      - ".github/**"
+      - "profiles/**"
+      - "SECURITY.md"
+      - "CONTRIBUTING.md"
+      - "README.md"
 
 permissions:
   contents: read
