@@ -11,7 +11,7 @@ APPROVED
 # --- TIME -------------------------------------------------
 # Commits after the declared boundary are invalid.
 
-LOCK_AT                    = 2030-01-01T00:00:00Z
+LOCK_AT                    = 2026-01-01T00:00:00Z
 TIME_BOUNDARY.ENFORCE      = YES
 TIME_BOUNDARY.MUTABLE      = NO
 
