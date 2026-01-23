@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ORIGINSEAL v1.0.0
 # Provenance sealing utility
 # Anchors original origin. No execution. No remediation.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ATTESTORIUM v1.0.0
 # Deterministic attestation utility
 # Witness only. No execution. No remediation. No mutation.

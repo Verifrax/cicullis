@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # KAIROCLASP v1.0.0
 # Temporal finality utility
 # Binds state to time. No execution. No remediation.

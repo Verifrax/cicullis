@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ARCHICUSTOS v1.0.0
 # Custody tracking utility
 # Records custody claims with continuity enforcement.

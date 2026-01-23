@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # LIMENWARD v1.0.0
 # Boundary enforcement utility
 # Guards irreversible transitions. No execution. No remediation.
