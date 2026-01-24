@@ -2,3 +2,11 @@
 # All changes require approval from the authoritative owner.
 
 * @midiakiasat
+
+# Protected paths (require explicit approval)
+/profiles/ @midiakiasat
+/FAILURE_CODES.json @midiakiasat
+/PROFILE_SCHEMA.json @midiakiasat
+/.failure_codes_checksum @midiakiasat
+/.profile_checksum @midiakiasat
+/.profile_schema_checksum @midiakiasat

@@ -10,7 +10,7 @@ jobs:
   determinism:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
 
       - name: Run twice and compare
         run: |
@@ -39,7 +39,7 @@ jobs:
   failure-codes-checksum:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
 
       - name: Verify FAILURE_CODES.json checksum
         run: |
