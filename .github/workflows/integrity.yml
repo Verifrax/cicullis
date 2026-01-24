@@ -1,0 +1,65 @@
+name: Integrity Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  profile-checksum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify profile checksum
+        run: |
+          EXPECTED=$(cat .profile_checksum | cut -d' ' -f1)
+          ACTUAL=$(sha256sum profiles/default.profile | cut -d' ' -f1)
+          
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "FAIL: profiles/default.profile has been modified"
+            echo "Expected: $EXPECTED"
+            echo "Actual: $ACTUAL"
+            exit 1
+          fi
+          echo "PASS: Profile checksum verified"
+
+  failure-codes-checksum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify FAILURE_CODES.json checksum
+        run: |
+          EXPECTED=$(cat .failure_codes_checksum)
+          ACTUAL=$(sha256sum FAILURE_CODES.json | cut -d' ' -f1)
+          
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "FAIL: FAILURE_CODES.json has been modified"
+            echo "Expected: $EXPECTED"
+            echo "Actual: $ACTUAL"
+            exit 1
+          fi
+          echo "PASS: Failure codes checksum verified"
+
+  malformed-profile-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test malformed profile rejection
+        run: |
+          # Create malformed profile
+          echo "INVALID_SYNTAX{{{{" > /tmp/malformed.profile
+          
+          # Run gate with malformed profile (should fail deterministically)
+          EXIT_CODE=0
+          ./gate.sh --profile /tmp/malformed.profile < /dev/null || EXIT_CODE=$?
+          
+          # Must fail with profile load error (code 2)
+          if [ "$EXIT_CODE" != "2" ]; then
+            echo "FAIL: Malformed profile should exit with code 2, got $EXIT_CODE"
+            exit 1
+          fi
+          echo "PASS: Malformed profile rejected with deterministic exit code"

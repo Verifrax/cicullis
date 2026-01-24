@@ -1,73 +1,41 @@
 # Security Policy
 
-## Scope
-
-CICULLIS is a deterministic CI enforcement action.
-
-It does **not**:
-- process secrets or credentials
-- make outbound network requests
-- transmit data externally
-- modify repository contents
-- execute user-defined commands
-
-All behavior is local, explicit, and observable.
-
----
-
-## Data Handling
-
-CICULLIS operates only on:
-- repository state
-- commit metadata
-- explicit profile input
-- local append-only ledgers
-
-No data leaves the GitHub Actions execution environment.
-
----
-
-## Threat Model
-
-CICULLIS is designed to:
-- fail closed
-- reject ambiguity
-- prevent silent bypass
-- avoid non-deterministic behavior
-
-There is no dynamic configuration surface and no runtime mutation.
-
----
-
 ## Supported Versions
 
-Only the latest **major version** is supported.
+| Version | Supported |
+|---------|-----------|
+| 1.x     | ✓         |
+| < 1.0   | ✗         |
 
-- Supported: `v1`
-- Unsupported: prior major versions
+## Reporting
 
-Security fixes, if any, will be released as patch versions under the current major tag.
+For security vulnerabilities affecting CICULLIS execution determinism or policy enforcement:
 
----
+1. Open a **private security advisory** via GitHub
+2. Include: version, reproduction steps, expected vs actual behavior
 
-## Reporting a Vulnerability
+## Response
 
-Report security issues **privately** via GitHub Security Advisories.
+- Acknowledgment: 48 hours
+- Assessment: 7 days
+- Fix (if applicable): 30 days
 
-Do **not** open public issues for security-sensitive reports.
+## Scope
 
-There is no SLA, warranty, or implied guarantee.
+**In scope:**
+- Policy bypass
+- Non-deterministic execution
+- Exit code contract violations
 
----
+**Out of scope:**
+- Denial of service (CICULLIS has no network surface)
+- Social engineering
+- Physical access attacks
 
-## Responsibility Boundary
+## Disclosure
 
-CICULLIS enforces decisions.  
-It does not assume responsibility for outcomes.
+All security fixes are disclosed publicly after patch release.
 
-Operators remain accountable for:
-- configuration choices
-- workflow design
-- downstream effects of enforcement
+## Contact
 
-Use implies acceptance of this boundary.
+GitHub Security Advisories only. No email contact.
