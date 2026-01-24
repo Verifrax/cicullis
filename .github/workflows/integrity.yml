@@ -43,6 +43,24 @@ jobs:
           fi
           echo "PASS: Failure codes checksum verified"
 
+  profile-schema-checksum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify PROFILE_SCHEMA.json checksum
+        run: |
+          EXPECTED=$(cat .profile_schema_checksum)
+          ACTUAL=$(sha256sum PROFILE_SCHEMA.json | cut -d' ' -f1)
+          
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "FAIL: PROFILE_SCHEMA.json has been modified"
+            echo "Expected: $EXPECTED"
+            echo "Actual: $ACTUAL"
+            exit 1
+          fi
+          echo "PASS: Profile schema checksum verified"
+
   malformed-profile-test:
     runs-on: ubuntu-latest
     steps:
