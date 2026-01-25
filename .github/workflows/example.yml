@@ -6,13 +6,17 @@ on:
 permissions:
   contents: read
 
+env:
+  LC_ALL: C
+  TZ: UTC
+
 jobs:
   cicullis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Run CICULLIS
-        uses: midiakiasat/cicullis@v1
+        uses: midiakiasat/cicullis@569b496eb09e4df687c56fc0dceb4abdc8d5479d # v1
         with:
           profile: profiles/default.profile

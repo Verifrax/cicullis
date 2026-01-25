@@ -6,11 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  LC_ALL: C
+  TZ: UTC
+
 jobs:
   profile-checksum:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Verify profile checksum
         run: |
@@ -28,7 +32,7 @@ jobs:
   failure-codes-checksum:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Verify FAILURE_CODES.json checksum
         run: |
@@ -46,7 +50,7 @@ jobs:
   profile-schema-checksum:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Verify PROFILE_SCHEMA.json checksum
         run: |
@@ -64,7 +68,7 @@ jobs:
   malformed-profile-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e1148ab8c88cfd102cc39c0ff8041a19fc37d2 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Test malformed profile rejection
         run: |
