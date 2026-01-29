@@ -10,10 +10,6 @@ on:
 permissions:
   contents: read
 
-env:
-  LC_ALL: C
-  TZ: UTC
-
 jobs:
   scorecard:
     runs-on: ubuntu-latest
