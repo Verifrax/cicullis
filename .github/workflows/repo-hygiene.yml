@@ -19,32 +19,26 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Only check tracked files. No filesystem scanning. Deterministic.
+          # Deterministic: tracked paths only.
           TRACKED="$(git ls-files)"
 
-          # 1) CICULLIS runtime state must never be tracked.
-          # If you later need published records, create a new explicit directory (e.g., records/) with schema.
-          echo "$TRACKED" | rg -q '^internal/(ledger|state)/' && {
+          fail() {
             echo "CI-GATE FAILED"
-            echo "Rule: REPO.TRACKED.RUNTIME_STATE"
+            echo "Rule: $1"
             echo "Decision: BLOCKED"
             exit 1
           }
+
+          # 1) CICULLIS runtime state must never be tracked.
+          echo "$TRACKED" | rg -q '^internal/(ledger|state)/' && fail "REPO.TRACKED.RUNTIME_STATE"
 
           # 2) OS/editor junk
-          echo "$TRACKED" | rg -q '(^|/)\.DS_Store$|(^|/)\.AppleDouble/|(^|/)__MACOSX/|(^|/)\.idea/|(^|/)\.vscode/' && {
-            echo "CI-GATE FAILED"
-            echo "Rule: REPO.TRACKED.JUNK"
-            echo "Decision: BLOCKED"
-            exit 1
-          }
+          echo "$TRACKED" | rg -q '(^|/)\.DS_Store$|(^|/)\.AppleDouble/|(^|/)__MACOSX/|(^|/)\.idea/|(^|/)\.vscode/' && fail "REPO.TRACKED.JUNK"
 
           # 3) Databases / caches / logs (high-risk, low-value to track)
-          echo "$TRACKED" | rg -q '(^|/).*\.sqlite3?$|(^|/).*\.db$|(^|/).*\.log$|(^|/)\.cache/|(^|/)coverage/|(^|/)dist/|(^|/)build/' && {
-            echo "CI-GATE FAILED"
-            echo "Rule: REPO.TRACKED.ARTIFACT"
-            echo "Decision: BLOCKED"
-            exit 1
-          }
+          echo "$TRACKED" | rg -q '(^|/).*\.sqlite3?$|(^|/).*\.db$|(^|/).*\.log$|(^|/)\.cache/|(^|/)coverage/|(^|/)dist/|(^|/)build/' && fail "REPO.TRACKED.ARTIFACT"
 
-          echo "OK: no tracked runtime/junk/artifacts"
+          # 4) Secret file types by filename (deterministic; no content heuristics)
+          echo "$TRACKED" | rg -q '(^|/)\.env(\..+)?$|(^|/)id_rsa|(^|/).*\.pem$|(^|/).*\.p12$|(^|/).*\.pfx$|(^|/).*\.key$' && fail "REPO.TRACKED.SECRET_FILE"
+
+          echo "OK: hygiene gate satisfied"

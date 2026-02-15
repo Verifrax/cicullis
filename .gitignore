@@ -1,7 +1,14 @@
-# OS / editor
+# macOS
 .DS_Store
+.AppleDouble/
+__MACOSX/
+
+# editors
 .vscode/
 .idea/
+
+# local hooks (machine policy, not repo policy)
+.githooks/
 
 # logs / temp
 *.log
@@ -20,34 +27,9 @@ credentials*
 secret*
 token*
 
-# node/python (if ever used)
-node_modules/
-.venv/
-__pycache__/
-*.pyc
-
-# CICULLIS runtime state (high risk if it contains any receipts/ledgers)
-internal/ledger/
-internal/state/
-
-# local caches
-.cache/
-dist/
-build/
-coverage/
-.githooks/
-.githooks/
-
-# macOS
-.DS_Store
-
 # runtime/state (never tracked)
 internal/ledger/
 internal/state/
-
-# editors
-.vscode/
-.idea/
 
 # caches / builds
 .cache/
@@ -55,8 +37,13 @@ coverage/
 dist/
 build/
 
-# logs / db
-*.log
+# databases
 *.sqlite
 *.sqlite3
 *.db
+
+# node/python (if ever used)
+node_modules/
+.venv/
+__pycache__/
+*.pyc
