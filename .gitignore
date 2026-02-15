@@ -37,3 +37,6 @@ build/
 coverage/
 .githooks/
 .githooks/
+
+# macOS
+.DS_Store
