@@ -12,16 +12,13 @@ jobs:
   cicullis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: midiakiasat/cicullis@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: midiakiasat/cicullis@569b496eb09e4df687c56fc0dceb4abdc8d5479d
 
   hygiene:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install ripgrep
-        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Deterministic tracked-artifact gate
         shell: bash
@@ -36,12 +33,12 @@ jobs:
             exit 1
           }
 
-          echo "$TRACKED" | rg -q '^internal/(ledger|state)/' && fail "REPO.TRACKED.RUNTIME_STATE"
+          echo "$TRACKED" | grep -E -q '^internal/(ledger|state)/' && fail "REPO.TRACKED.RUNTIME_STATE"
 
-          echo "$TRACKED" | rg -q '(^|/)\.DS_Store$|(^|/)\.AppleDouble/|(^|/)__MACOSX/|(^|/)\.idea/|(^|/)\.vscode/' && fail "REPO.TRACKED.JUNK"
+          echo "$TRACKED" | grep -E -q '(^|/)\.DS_Store$|(^|/)\.AppleDouble/|(^|/)__MACOSX/|(^|/)\.idea/|(^|/)\.vscode/' && fail "REPO.TRACKED.JUNK"
 
-          echo "$TRACKED" | rg -q '(^|/).*\.sqlite3?$|(^|/).*\.db$|(^|/).*\.log$|(^|/)\.cache/|(^|/)coverage/|(^|/)dist/|(^|/)build/' && fail "REPO.TRACKED.ARTIFACT"
+          echo "$TRACKED" | grep -E -q '(^|/).*\.sqlite3?$|(^|/).*\.db$|(^|/).*\.log$|(^|/)\.cache/|(^|/)coverage/|(^|/)dist/|(^|/)build/' && fail "REPO.TRACKED.ARTIFACT"
 
-          echo "$TRACKED" | rg -q '(^|/)\.env(\..+)?$|(^|/)id_rsa|(^|/).*\.pem$|(^|/).*\.p12$|(^|/).*\.pfx$|(^|/).*\.key$' && fail "REPO.TRACKED.SECRET_FILE"
+          echo "$TRACKED" | grep -E -q '(^|/)\.env(\..+)?$|(^|/)id_rsa|(^|/).*\.pem$|(^|/).*\.p12$|(^|/).*\.pfx$|(^|/).*\.key$' && fail "REPO.TRACKED.SECRET_FILE"
 
           echo "OK: hygiene gate satisfied"
