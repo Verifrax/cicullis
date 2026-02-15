@@ -1,4 +1,4 @@
-name: Repo hygiene (tracked artifacts)
+name: Enforcement
 
 on:
   pull_request:
@@ -9,17 +9,24 @@ permissions:
   contents: read
 
 jobs:
+  cicullis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: midiakiasat/cicullis@v1
+
   hygiene:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reject tracked runtime/state/artifacts
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
+      - name: Deterministic tracked-artifact gate
         shell: bash
         run: |
           set -euo pipefail
-
-          # Deterministic: tracked paths only.
           TRACKED="$(git ls-files)"
 
           fail() {
@@ -29,16 +36,12 @@ jobs:
             exit 1
           }
 
-          # 1) CICULLIS runtime state must never be tracked.
           echo "$TRACKED" | rg -q '^internal/(ledger|state)/' && fail "REPO.TRACKED.RUNTIME_STATE"
 
-          # 2) OS/editor junk
           echo "$TRACKED" | rg -q '(^|/)\.DS_Store$|(^|/)\.AppleDouble/|(^|/)__MACOSX/|(^|/)\.idea/|(^|/)\.vscode/' && fail "REPO.TRACKED.JUNK"
 
-          # 3) Databases / caches / logs (high-risk, low-value to track)
           echo "$TRACKED" | rg -q '(^|/).*\.sqlite3?$|(^|/).*\.db$|(^|/).*\.log$|(^|/)\.cache/|(^|/)coverage/|(^|/)dist/|(^|/)build/' && fail "REPO.TRACKED.ARTIFACT"
 
-          # 4) Secret file types by filename (deterministic; no content heuristics)
           echo "$TRACKED" | rg -q '(^|/)\.env(\..+)?$|(^|/)id_rsa|(^|/).*\.pem$|(^|/).*\.p12$|(^|/).*\.pfx$|(^|/).*\.key$' && fail "REPO.TRACKED.SECRET_FILE"
 
           echo "OK: hygiene gate satisfied"
