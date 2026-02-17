@@ -5,18 +5,22 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: read
+# Default-deny. Each job declares what it needs.
+permissions: {}
 
 jobs:
   cicullis:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - uses: midiakiasat/cicullis@569b496eb09e4df687c56fc0dceb4abdc8d5479d
 
   hygiene:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
@@ -45,6 +49,8 @@ jobs:
 
   selftest:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - name: Expect runtime-state failure
@@ -58,12 +64,13 @@ jobs:
 
   selftest_pass:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - name: Expect clean pass fixture
         run: |
           cd fixtures/pass
-          # PASS means: no forbidden tracked paths exist in the fixture
           if git ls-files | grep -E -q '^internal/(ledger|state)/'; then
             exit 1
           else
