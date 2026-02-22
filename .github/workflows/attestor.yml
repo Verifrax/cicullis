@@ -1,0 +1,67 @@
+name: Attestor
+
+on:
+  workflow_run:
+    workflows: ["Gates"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: read
+
+jobs:
+  attest:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint GitHub App token
+        id: app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.VERIFRAX_ATTESTOR_APP_ID }}
+          private-key: ${{ secrets.VERIFRAX_ATTESTOR_PRIVATE_KEY }}
+          owner: Verifrax
+          repositories: CICULLIS
+
+      - name: Resolve PR and SHA
+        id: ctx
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPO: ${{ github.repository }}
+          SHA:  ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          pr=$(gh api "repos/$REPO/commits/$SHA/pulls" \
+            -H "Accept: application/vnd.github+json" \
+            --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            echo "No PR found for SHA=$SHA. Exiting."
+            exit 0
+          fi
+          echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Gate on combined status = success
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPO: ${{ github.repository }}
+          SHA:  ${{ steps.ctx.outputs.sha }}
+        run: |
+          set -euo pipefail
+          state=$(gh api "repos/$REPO/commits/$SHA/status" --jq '.state')
+          echo "combined status: $state"
+          [ "$state" = "success" ] || exit 0
+
+      - name: Approve PR as App
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPO: ${{ github.repository }}
+          PR:   ${{ steps.ctx.outputs.pr }}
+          SHA:  ${{ steps.ctx.outputs.sha }}
+        run: |
+          set -euo pipefail
+          gh api -X POST "repos/$REPO/pulls/$PR/reviews" \
+            -H "Accept: application/vnd.github+json" \
+            -f event=APPROVE \
+            -f body="VERIFRAX-ATTESTOR: Gates succeeded; combined status success on $SHA. Deterministic approval."
