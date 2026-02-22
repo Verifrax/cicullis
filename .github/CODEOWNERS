@@ -1,16 +1,16 @@
-# Global ownership — immutable verification-first repository.
-# All paths require review from the maintainer identity.
+# Global ownership — enforcement-grade repository.
+# All changes require review from BOTH architect and systems authority.
 
-*                       @midiakiasat
+*                       @midiakiasat @verifrax-systems
 
 # Governance surface
-/GOVERNANCE.md          @midiakiasat
-/SECURITY.md            @midiakiasat
-/README.md              @midiakiasat
+/GOVERNANCE.md          @midiakiasat @verifrax-systems
+/SECURITY.md            @midiakiasat @verifrax-systems
+/README.md              @midiakiasat @verifrax-systems
 
 # Cryptographic trust root
-/security/              @midiakiasat
+/security/              @midiakiasat @verifrax-systems
 
 # CI / policy surface
-/.github/               @midiakiasat
-/.github/workflows/     @midiakiasat
+/.github/               @midiakiasat @verifrax-systems
+/.github/workflows/     @midiakiasat @verifrax-systems
