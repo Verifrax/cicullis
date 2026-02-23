@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Resolve PR head SHA
         id: ctx
-        env:
-          REPO: ${{ github.event.workflow_run.repository.full_name }}
         run: |
           set -euo pipefail
           sha="$(jq -r '.workflow_run.pull_requests[0].head.sha // empty' "$GITHUB_EVENT_PATH")"
@@ -34,17 +32,21 @@ jobs:
           fi
 
           echo "has_pr=true" >> "$GITHUB_OUTPUT"
-          echo "repo=$REPO"  >> "$GITHUB_OUTPUT"
-          echo "sha=$sha"    >> "$GITHUB_OUTPUT"
+          echo "repo=${{ github.repository }}" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-      - name: Verify upstream required statuses
+      - name: Verify required legacy contexts
         if: ${{ steps.ctx.outputs.has_pr == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
-          REPO: ${{ steps.ctx.outputs.repo }}
-          SHA:  ${{ steps.ctx.outputs.sha }}
         run: |
           set -euo pipefail
+
+          repo="${{ steps.ctx.outputs.repo }}"
+          sha="${{ steps.ctx.outputs.sha }}"
+
+          json="$(gh api "repos/$repo/commits/$sha/status" \
+            -H "Accept: application/vnd.github+json")"
 
           required=(
             "Gates / cicullis (pull_request)"
@@ -53,21 +55,21 @@ jobs:
           )
 
           for ctx in "${required[@]}"; do
-            state="$(gh api "repos/$REPO/commits/$SHA/status" \
-              -H "Accept: application/vnd.github+json" \
-              --jq --arg c "$ctx" '.statuses[]? | select(.context==$c) | .state' | head -n1)"
+            state="$(echo "$json" | jq -r --arg c "$ctx" \
+              '.statuses[]? | select(.context==$c) | .state' | head -n1)"
 
-            [ "$state" = "success" ] || exit 1
+            if [ "$state" != "success" ]; then
+              echo "FAILED: $ctx = $state"
+              exit 1
+            fi
           done
 
       - name: Publish verifrax-attestor
         if: ${{ steps.ctx.outputs.has_pr == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
-          REPO: ${{ steps.ctx.outputs.repo }}
-          SHA:  ${{ steps.ctx.outputs.sha }}
         run: |
-          gh api -X POST "repos/$REPO/statuses/$SHA" \
+          gh api -X POST "repos/${{ steps.ctx.outputs.repo }}/statuses/${{ steps.ctx.outputs.sha }}" \
             -H "Accept: application/vnd.github+json" \
             -f state=success \
             -f context="verifrax-attestor" \
