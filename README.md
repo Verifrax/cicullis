@@ -238,7 +238,7 @@ For regulated or compliance‑bound environments:
 Example:
 
 ```yaml
-- uses: midiakiasat/cicullis@<immutable-commit-sha>
+- uses: Verifrax/cicullis@<immutable-commit-sha>
 ```
 
 ---
