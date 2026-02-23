@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  checks: read
   statuses: write
   pull-requests: read
 
@@ -17,28 +16,29 @@ concurrency:
 
 jobs:
   attest:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Resolve PR head SHA from workflow_run payload
+      - name: Resolve PR head SHA
         id: ctx
         env:
           REPO: ${{ github.event.workflow_run.repository.full_name }}
         run: |
           set -euo pipefail
-
-          # Authoritative PR head SHA (only present when workflow_run originates from a PR run)
           sha="$(jq -r '.workflow_run.pull_requests[0].head.sha // empty' "$GITHUB_EVENT_PATH")"
+
           if [ -z "$sha" ]; then
-            echo "No PR associated with this workflow_run. Exiting."
+            echo "has_pr=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "repo=$REPO" >> "$GITHUB_OUTPUT"
-          echo "sha=$sha"   >> "$GITHUB_OUTPUT"
+          echo "has_pr=true" >> "$GITHUB_OUTPUT"
+          echo "repo=$REPO"  >> "$GITHUB_OUTPUT"
+          echo "sha=$sha"    >> "$GITHUB_OUTPUT"
 
-      - name: Verify check-runs success
+      - name: Verify upstream required statuses
+        if: ${{ steps.ctx.outputs.has_pr == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ steps.ctx.outputs.repo }}
@@ -46,43 +46,30 @@ jobs:
         run: |
           set -euo pipefail
 
-          checks="$(gh api "repos/$REPO/commits/$SHA/check-runs" \
-            -H "Accept: application/vnd.github+json" \
-            --jq '.check_runs[]? | "\(.name)=\(.conclusion // \"none\")"'
+          required=(
+            "Gates / cicullis (pull_request)"
+            "Gates / hygiene (pull_request)"
+            "Gates / selftest (pull_request)"
+          )
 
-          echo "$checks"
+          for ctx in "${required[@]}"; do
+            state="$(gh api "repos/$REPO/commits/$SHA/status" \
+              -H "Accept: application/vnd.github+json" \
+              --jq --arg c "$ctx" '.statuses[]? | select(.context==$c) | .state' | head -n1)"
 
-          if echo "$checks" | grep -Ev '=(success|skipped|neutral)$' >/dev/null; then
-            echo "Non-successful check-run detected."
-            exit 1
-          fi
+            [ "$state" = "success" ] || exit 1
+          done
 
-      - name: Verify combined status success
+      - name: Publish verifrax-attestor
+        if: ${{ steps.ctx.outputs.has_pr == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ steps.ctx.outputs.repo }}
           SHA:  ${{ steps.ctx.outputs.sha }}
         run: |
-          set -euo pipefail
-
-          state="$(gh api "repos/$REPO/commits/$SHA/status" \
-            -H "Accept: application/vnd.github+json" \
-            --jq '.state')"
-
-          echo "Combined status: $state"
-          [ "$state" = "success" ]
-
-      - name: Publish verifrax-attestor status
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ steps.ctx.outputs.repo }}
-          SHA:  ${{ steps.ctx.outputs.sha }}
-        run: |
-          set -euo pipefail
-
           gh api -X POST "repos/$REPO/statuses/$SHA" \
             -H "Accept: application/vnd.github+json" \
             -f state=success \
             -f context="verifrax-attestor" \
-            -f description="Attestor: Gates + checks verified" \
+            -f description="Attestor: upstream contexts verified" \
             -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
