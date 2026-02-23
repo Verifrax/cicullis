@@ -198,7 +198,7 @@ Exit codes map deterministically to failure domains.
 # Quick Start
 
 ```yaml
-- uses: Verifrax/cicullis@v3
+- uses: Verifrax/cicullis@v4
 ```
 
 ---
@@ -219,7 +219,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: Verifrax/cicullis@v3
+      - uses: Verifrax/cicullis@v4
 ```
 
 ---
