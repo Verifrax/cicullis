@@ -1,16 +1,2 @@
-# Global ownership — enforcement-grade repository.
-# All changes require review from BOTH architect and systems authority.
-
-*                       @midiakiasat @verifrax-systems
-
-# Governance surface
-/GOVERNANCE.md          @midiakiasat @verifrax-systems
-/SECURITY.md            @midiakiasat @verifrax-systems
-/README.md              @midiakiasat @verifrax-systems
-
-# Cryptographic trust root
-/security/              @midiakiasat @verifrax-systems
-
-# CI / policy surface
-/.github/               @midiakiasat @verifrax-systems
-/.github/workflows/     @midiakiasat @verifrax-systems
+# satisfy single-operator reviews
+/ @verifrax-systems @midiakiasat
