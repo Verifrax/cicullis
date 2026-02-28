@@ -1,24 +1,23 @@
 name: cicullis
-description: >
-  Deterministic CI gate enforcing irreversible decisions.
+description: "Deterministic CI gate enforcing irreversible decisions."
+author: "Midia Kiasat"
+branding:
+  icon: shield
+  color: gray-dark
 
-author: Midia Kiasat
+inputs:
+  mode:
+    description: "pass|enforce"
+    required: false
+    default: "pass"
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-  - name: CICULLIS gate
-    shell: bash
-    run: |
-      chmod +x "$GITHUB_ACTION_PATH/gate.sh"
-      "$GITHUB_ACTION_PATH/gate.sh"
-    - shell: bash
+    - name: CICULLIS gate
+      shell: bash
+      env:
+        CICULLIS_MODE: ${{ inputs.mode }}
       run: |
-        chmod +x gate.sh
-        ./gate.sh
-
-branding:
-  icon: slash
-  color: red
-
-# reindex: 2026-02-23T11:23:53Z
+        chmod +x "$GITHUB_ACTION_PATH/gate.sh"
+        "$GITHUB_ACTION_PATH/gate.sh"
