@@ -4,27 +4,28 @@ set -euo pipefail
 mode="${CICULLIS_MODE:-pass}"
 profile="${CICULLIS_PROFILE:-}"
 
-# Exit codes (deterministic):
+# Exit codes:
 # 0 = pass
-# 1 = enforcement fail (policy says NO)
-# 2 = malformed profile / invalid configuration
-
+# 1 = enforcement fail
+# 2 = malformed profile / invalid config
 die2(){ echo "CICULLIS: $*" >&2; exit 2; }
 die1(){ echo "CICULLIS: $*" >&2; exit 1; }
 
-# If a profile is provided, it must be readable.
+# Profile validation (always enforced if profile is provided)
 if [[ -n "$profile" ]]; then
   [[ -f "$profile" ]] || die2 "profile not found: $profile"
-fi
-
-# Minimal "malformed profile" detector:
-# - if profile exists but is empty -> malformed
-# - if it contains any NUL byte -> malformed
-# - if it contains a line starting with "MALFORMED:" -> malformed (test hook)
-if [[ -n "$profile" ]]; then
   [[ -s "$profile" ]] || die2 "profile empty: $profile"
   if LC_ALL=C grep -q $'\x00' "$profile" 2>/dev/null; then die2 "profile contains NUL: $profile"; fi
-  if grep -qE '^[[:space:]]*MALFORMED:' "$profile" 2>/dev/null; then die2 "profile marked malformed: $profile"; fi
+  # Must be valid JSON (selftests expect deterministic malformed=2)
+  python3 - "$profile" <<'PY' || exit 2
+import json,sys
+p=sys.argv[1]
+try:
+    with open(p,"rb") as f:
+        json.load(f)
+except Exception:
+    raise SystemExit(2)
+PY
 fi
 
 case "$mode" in
@@ -33,10 +34,8 @@ case "$mode" in
     exit 0
     ;;
   enforce)
-    # No profile => deterministic config error for enforcement mode
     [[ -n "$profile" ]] || die2 "enforce requires CICULLIS_PROFILE"
-    # Placeholder for real policy evaluation:
-    # If profile contains "DENY" => fail-closed (1), else pass (0)
+    # Placeholder enforcement: profile contains token "DENY" => exit 1
     if grep -qE '(^|[[:space:]])DENY($|[[:space:]])' "$profile" 2>/dev/null; then
       die1 "policy denied by profile: $profile"
     fi
