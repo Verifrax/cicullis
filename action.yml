@@ -16,8 +16,5 @@ runs:
   steps:
     - name: CICULLIS gate
       shell: bash
-      env:
-        CICULLIS_MODE: ${{ inputs.mode }}
       run: |
-        chmod +x "$GITHUB_ACTION_PATH/gate.sh"
-        "$GITHUB_ACTION_PATH/gate.sh"
+        bash "$GITHUB_ACTION_PATH/gate.sh"
