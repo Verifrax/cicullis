@@ -1,11 +1,11 @@
-name: scorecard
+name: attest
 on:
   pull_request:
   push:
     branches: [ main ]
 jobs:
-  scorecard:
+  attest:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "scorecard: ok"
+          echo "attest: ok"

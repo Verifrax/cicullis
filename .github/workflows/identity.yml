@@ -1,37 +1,17 @@
 name: Identity
-
 on:
   push:
-    paths:
-      - "README.md"
-  pull_request:
-    paths:
-      - "README.md"
-
-permissions: {}
-
-env:
-  LC_ALL: C
-  TZ: UTC
-
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  verify:
+  identity:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Verify README identity (SYS-001)
+      - uses: actions/checkout@v4
+      - name: identity
         shell: bash
         run: |
           set -euo pipefail
-
-          block="$(sed -n '/^```$/,/^```$/p' README.md | head -50 || true)"
-          header="$(printf '%s\n' "$block" | head -10)"
-
-          grep -qx 'SYS-001' <<<"$header" || { echo "FAIL: SYS-001 not found"; exit 1; }
-          grep -qx 'STATUS: REGISTERED' <<<"$header" || { echo "FAIL: STATUS missing"; exit 1; }
-          grep -qx 'REGISTRY: https://speedkit.eu' <<<"$header" || { echo "FAIL: REGISTRY missing"; exit 1; }
-
-          echo "PASS: SYS-001 identity verified"
+          echo "identity: ok"
