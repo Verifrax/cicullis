@@ -26,6 +26,8 @@ STATUS: FINAL
 
 # CICULLIS
 
+Public host ownership: cicullis.verifrax.net.
+
 **CICULLIS** is a deterministic GitHub Action that enforces irreversible policy contracts at CI time.
 
 It is a binary merge gate.
