@@ -5,7 +5,101 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CICULLIS Enforcement Reference</title>
   <meta name="description" content="CICULLIS enforcement reference surface for cicullis.verifrax.net.">
-  <link rel="stylesheet" href="/surface-system/shell/base.css?v=20260401-2245">
+  <style>
+@import url("../tokens/tokens.css");
+@import url("../components/panel.css");
+@import url("../components/badge.css");
+@import url("../components/divider.css");
+@import url("../components/code.css");
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--vf-bg);
+  color: var(--vf-text);
+  font-family: var(--vf-font-sans);
+  line-height: 1.55;
+}
+
+a {
+  color: var(--vf-accent);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+body {
+  padding: var(--vf-space-6) var(--vf-space-4) var(--vf-space-8);
+}
+
+.surface {
+  max-width: var(--vf-max-width);
+  margin: 0 auto;
+}
+
+.surface-id {
+  display: inline-block;
+  margin-bottom: var(--vf-space-4);
+  color: var(--vf-accent);
+  font-family: var(--vf-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.surface-title {
+  margin: 0 0 var(--vf-space-3);
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.surface-role {
+  margin: 0 0 var(--vf-space-3);
+  color: var(--vf-text);
+  font-size: 18px;
+}
+
+.surface-boundary {
+  margin: 0 0 var(--vf-space-6);
+  color: var(--vf-muted);
+  max-width: 64ch;
+}
+
+.stack > * + * {
+  margin-top: var(--vf-space-5);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--vf-space-2) var(--vf-space-4);
+}
+
+.kv dt {
+  color: var(--vf-muted);
+  font-family: var(--vf-font-mono);
+  font-size: 13px;
+}
+
+.kv dd {
+  margin: 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-3) var(--vf-space-4);
+}
+
+.list-tight li + li {
+  margin-top: var(--vf-space-2);
+}
+
+</style>
 </head>
 <body>
   <main class="surface stack">
