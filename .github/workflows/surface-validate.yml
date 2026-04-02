@@ -1,0 +1,19 @@
+name: Surface projection validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate host config
+        run: python3 .surface/vendor/scripts/validate_host.py surface.host.json
+      - name: Re-project surface
+        run: python3 .surface/vendor/scripts/project_host.py .
+      - name: Assert committed output is current
+        run: git diff --exit-code -- . ':!README.md'
