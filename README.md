@@ -15,7 +15,7 @@ Deterministic enforcement repository for `cicullis.verifrax.net`, responsible fo
 * Repository role: enforcement boundary only
 * Public host ownership: `cicullis.verifrax.net`
 * Surface class: enforcement reference and CI action surface
-* Package status: repository and action surface only unless package publication is explicitly proven elsewhere
+* npm package: `@verifrax/cicullis@0.1.0`
 * Stack position: enforcement boundary adjacent to governed repositories and workflow gates
 * Authority relation: consumes governance and authority-linked rules; does not issue authority
 * Artifact relation: must stay aligned with the artifact-0005 boundary without claiming to author, execute, verify, or register artifact-0005 itself
