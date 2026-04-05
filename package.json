@@ -1,0 +1,30 @@
+{
+  "name": "@verifrax/cicullis",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Deterministic GitHub enforcement action for Verifrax merge-time policy and compliance gating.",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bin": {
+    "cicullis": "gate.sh"
+  },
+  "files": [
+    "action.yml",
+    "gate.sh",
+    "FAILURE_CODES.json",
+    "PROFILE_SCHEMA.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Verifrax/cicullis.git"
+  },
+  "homepage": "https://github.com/Verifrax/cicullis#readme",
+  "bugs": {
+    "url": "https://github.com/Verifrax/cicullis/issues"
+  }
+}
