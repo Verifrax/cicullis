@@ -74,4 +74,3 @@ This repository is part of the Verifrax sovereign stack and remains bounded rela
 
 - **[ANAGNORIUM](https://github.com/Verifrax/ANAGNORIUM)** for terminal recognition
 - **[REGRESSORIUM](https://github.com/Verifrax/REGRESSORIUM)** for terminal recourse
-
