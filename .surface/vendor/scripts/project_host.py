@@ -53,6 +53,7 @@ def render(cfg, surface_sha):
     host_class = cfg["hostClass"]
     title = cfg["title"]
     repo = cfg["repo"]
+    repo_url = f"https://github.com/Verifrax/{repo}"
     description = cfg["description"]
     role = cfg["role"]
     deploy_mode = cfg["deployMode"]
@@ -71,6 +72,7 @@ def render(cfg, surface_sha):
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{escape(title)}</title>
   <meta name="description" content="{escape(description)}">
+  <link rel="canonical" href="{escape(host if host.endswith("/") else host + "/")}">
   <link rel="stylesheet" href="assets/surface.css">
 </head>
 <body>
@@ -102,7 +104,7 @@ def render(cfg, surface_sha):
       <h2>Surface authority</h2>
       <ul class="list">
         <li class="row"><span class="label">Host</span><span class="value"><code>{escape(host)}</code></span></li>
-        <li class="row"><span class="label">Repository</span><span class="value"><code>{escape(repo)}</code></span></li>
+        <li class="row"><span class="label">Repository</span><span class="value"><a href="{escape(repo_url)}">{escape(repo)}</a></span></li>
         <li class="row"><span class="label">Host class</span><span class="value"><code>{escape(host_class)}</code></span></li>
         <li class="row"><span class="label">Surface role</span><span class="value"><code>{escape(role)}</code></span></li>
         <li class="row"><span class="label">Projection source</span><span class="value"><code>VERIFRAX-SURFACE@{escape(surface_sha[:12])}</code></span></li>
