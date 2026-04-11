@@ -1,4 +1,4 @@
-name: Publish cicullis surface
+name: Publish CICULLIS enforcement surface
 
 on:
   push:
@@ -28,24 +28,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf dist
-          mkdir -p dist/rules dist/boundary dist/actions
-          cp CNAME dist/CNAME
-          cp public/index.html dist/index.html
-          cp public/rules/index.html dist/rules/index.html
-          cp public/boundary/index.html dist/boundary/index.html
-          cp public/actions/index.html dist/actions/index.html
-          cp -R surface-system dist/surface-system
-          test -f dist/index.html
-          test -f dist/rules/index.html
-          test -f dist/boundary/index.html
-          test -f dist/actions/index.html
-          test -f dist/surface-system/shell/base.css
-          grep -Fx "cicullis.verifrax.net" dist/CNAME
+          rm -rf out
+          mkdir -p out
+          cp CNAME out/CNAME
+          cp index.html out/index.html
+          cp 404.html out/404.html
+          [ -d assets ] && cp -R assets out/assets || true
+          [ -d public ] && cp -R public out/public || true
+          [ -d surface-system ] && cp -R surface-system out/surface-system || true
+          [ -d dist ] && cp -R dist out/dist || true
+          test -f out/index.html
+          test -f out/404.html
+          test -f out/CNAME
+          grep -Fx "cicullis.verifrax.net" out/CNAME
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: out
 
       - id: deployment
         uses: actions/deploy-pages@v4
