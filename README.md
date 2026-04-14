@@ -1,5 +1,9 @@
 # CICULLIS
 
+Package: @verifrax/cicullis
+Binary: cicullis
+Repository: Verifrax/cicullis
+
 CICULLIS is the Verifrax enforcement-boundary primitive: the bounded primitive surface for enforcement and cutoff-boundary handling without becoming authored protocol source, authority issuance, governed execution, public verification, proof publication, archive/reference, or intake.
 
 ## Proof artifacts
