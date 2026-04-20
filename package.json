@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "description": "Deterministic GitHub enforcement action for Verifrax merge-time policy and compliance gating.",
-  "license": "Apache-2.0",
+  "license": "AGPL-3.0",
   "type": "commonjs",
   "bin": {
     "cicullis": "gate.sh"
