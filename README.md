@@ -1,5 +1,7 @@
 # CICULLIS
 
+* License: GNU General Public License v3.0
+
 Package: @verifrax/cicullis
 Binary: cicullis
 Repository: Verifrax/cicullis
@@ -34,8 +36,6 @@ This repository is part of the VERIFRAX proof perimeter.
 * Package: `@verifrax/cicullis`
 * Binary: `cicullis`
 * Current repository posture: live primitive boundary
-* License: Apache License Version 2.0
-
 ## Boundary
 
 This repository owns the enforcement-boundary primitive only.
@@ -139,4 +139,4 @@ CICULLIS is not intake.
 
 ## License
 
-Apache License Version 2.0
+This repository is licensed under the GNU General Public License v3.0. See `LICENSE`.
